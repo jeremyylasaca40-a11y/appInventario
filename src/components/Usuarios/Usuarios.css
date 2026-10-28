@@ -1,0 +1,71 @@
+﻿.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-circle-initial {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #004b93;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.role-administrador {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.role-almacenero {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.role-supervisor {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.status-toggle-btn {
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
