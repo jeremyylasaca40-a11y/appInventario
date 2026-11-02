@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import './Layout.css';
 
@@ -9,10 +9,10 @@ const Layout = () => {
 
   useEffect(() => {
     if (darkMode) {
-      document.body.classList.add('dark-theme');
+      document.body.classList.add('dark-theme', 'dark-mode');
       localStorage.setItem('senati_theme', 'dark');
     } else {
-      document.body.classList.remove('dark-theme');
+      document.body.classList.remove('dark-theme', 'dark-mode');
       localStorage.setItem('senati_theme', 'light');
     }
   }, [darkMode]);
@@ -33,6 +33,7 @@ const Layout = () => {
   }
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     localStorage.removeItem('senati_user');
     window.location.href = '/login';
   };

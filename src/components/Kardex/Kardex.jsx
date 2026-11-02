@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import './Kardex.css';
@@ -226,12 +227,20 @@ const Kardex = () => {
       </div>
 
       {/* Modal de Transacción Kardex */}
-      {showModal && (
+      {showModal && createPortal(
         <div className="modal-backdrop" onClick={() => setShowModal(false)}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Registrar Movimiento de Inventario</h3>
-              <button className="modal-close-btn" onClick={() => setShowModal(false)}>&times;</button>
+              <div className="modal-header-left">
+                <div className="modal-header-icon">
+                  🔄
+                </div>
+                <div className="modal-header-text">
+                  <h3>Registrar Movimiento de Inventario</h3>
+                  <p>Operación transaccional con actualización de stock</p>
+                </div>
+              </div>
+              <button className="modal-close-btn" onClick={() => setShowModal(false)} aria-label="Cerrar">×</button>
             </div>
 
             <form onSubmit={handleSubmit} className="modal-form">
@@ -343,7 +352,8 @@ const Kardex = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -31,18 +31,32 @@
   --transition:       all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.dark-mode, .dark-theme, body.dark-mode, body.dark-theme {
+  --prod-surface:     #131d31;
+  --prod-bg:          #0b1120;
+  --prod-border:      #1e293b;
+  --prod-text:        #f8fafc;
+  --prod-muted:       #94a3b8;
+  --prod-header-bg:   #152238;
+  --prod-row-hover:   #182642;
+  --prod-green-bg:    rgba(22, 163, 74, 0.2);
+  --prod-red-bg:      rgba(220, 38, 38, 0.2);
+  --prod-amber-bg:    rgba(217, 119, 6, 0.2);
+  --shadow-card:      0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
 /* ── PAGE WRAPPER ─────────────────────────────── */
 .view-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  animation: pageIn 0.4s ease both;
+  animation: pageIn 0.3s ease;
 }
 
 @keyframes pageIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── STATS ROW ────────────────────────────────── */

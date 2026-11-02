@@ -1,4 +1,4 @@
-﻿.layout-container {
+.layout-container {
   display: flex;
   min-height: 100vh;
   background-color: #f1f5f9;
@@ -279,11 +279,28 @@
 }
 
 /* ========================================= */
-/* MODO OSCURO (DARK MODE ELEGANTE)          */
+/* MODO OSCURO (DARK MODE ELEGANTE GLOBAL)    */
 /* ========================================= */
+.dark-mode, .dark-theme {
+  --senati-dark: #070d18;
+  --bg-main: #0b1120;
+  --card-bg: #131d31;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: #1e293b;
+}
+
 .dark-mode {
   background-color: #0b1120;
   color: #f1f5f9;
+}
+
+.dark-mode .layout-main {
+  background-color: #0b1120;
+}
+
+.dark-mode .layout-content {
+  background-color: #0b1120;
 }
 
 .dark-mode .layout-topbar {
@@ -314,6 +331,7 @@
   color: #38bdf8;
 }
 
+/* Dashboard KPIs & Cards */
 .dark-mode .kpi-card {
   background: #131d31;
   border-color: #1e293b;
@@ -335,6 +353,7 @@
 .dark-mode .dash-table th {
   color: #94a3b8;
   border-bottom-color: #1e293b;
+  background: #152238;
 }
 
 .dark-mode .dash-table td {
@@ -346,80 +365,267 @@
   background: #18233c;
 }
 
+/* Stat Cards en Productos */
+.dark-mode .prod-stat-card {
+  background: #131d31 !important;
+  border-color: #1e293b !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark-mode .prod-stat-info strong {
+  color: #f8fafc !important;
+}
+
+.dark-mode .prod-stat-info span {
+  color: #94a3b8 !important;
+}
+
+/* Contenedores de Tablas en todas las vistas */
 .dark-mode .table-card {
-  background: #131d31;
-  border-color: #1e293b;
+  background: #131d31 !important;
+  border-color: #1e293b !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
 .dark-mode .table-card-title {
-  border-bottom-color: #1e293b;
+  background: #152238 !important;
+  border-bottom: 1px solid #1e293b !important;
+  color: #f8fafc !important;
 }
 
-.dark-mode .table-card-title h3 {
-  color: #f8fafc;
+.dark-mode .table-card-title h3,
+.dark-mode .table-title-left h3 {
+  color: #f8fafc !important;
+}
+
+.dark-mode .count-badge,
+.dark-mode .count-pill {
+  background: rgba(30, 111, 232, 0.2) !important;
+  color: #60a5fa !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Tablas generales */
+.dark-mode .table-responsive {
+  background: #131d31 !important;
+}
+
+.dark-mode .custom-table {
+  background: #131d31 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark-mode .custom-table thead tr {
+  background: #152238 !important;
 }
 
 .dark-mode .custom-table th {
-  background: #18233c;
-  color: #94a3b8;
-  border-color: #1e293b;
+  background: #152238 !important;
+  color: #94a3b8 !important;
+  border-bottom: 2px solid #1e293b !important;
 }
 
 .dark-mode .custom-table td {
-  color: #e2e8f0;
-  border-bottom-color: #1a243a;
+  color: #e2e8f0 !important;
+  border-bottom: 1px solid #1a243a !important;
 }
 
-.dark-mode .custom-table tr:hover {
-  background: #18233c;
+.dark-mode .custom-table tbody tr {
+  background: transparent !important;
 }
 
+.dark-mode .custom-table tbody tr:hover {
+  background: #182642 !important;
+}
+
+.dark-mode .row-id {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+  border: 1px solid #334155 !important;
+}
+
+.dark-mode .prod-name-info strong {
+  color: #f8fafc !important;
+}
+
+.dark-mode .prod-supplier,
+.dark-mode .text-muted {
+  color: #94a3b8 !important;
+}
+
+.dark-mode .font-semibold {
+  color: #f8fafc !important;
+}
+
+.dark-mode .prod-avatar {
+  background: linear-gradient(135deg, #1e3a8a, #1e293b) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Botones de acción Editar y Eliminar */
+.dark-mode .btn-edit {
+  background: rgba(217, 119, 6, 0.2) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+.dark-mode .btn-edit:hover {
+  background: rgba(217, 119, 6, 0.35) !important;
+  color: #fef3c7 !important;
+}
+
+.dark-mode .btn-delete {
+  background: rgba(220, 38, 38, 0.2) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+.dark-mode .btn-delete:hover {
+  background: rgba(220, 38, 38, 0.35) !important;
+  color: #fee2e2 !important;
+}
+
+.dark-mode .btn-secondary {
+  background: #18233c !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark-mode .btn-secondary:hover {
+  background: #1e293b !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+}
+
+/* Buscador */
 .dark-mode .search-box {
-  background: #131d31;
-  border-color: #334155;
+  background: #131d31 !important;
+  border-color: #334155 !important;
 }
 
 .dark-mode .search-box input {
-  color: #f8fafc;
-  background: transparent;
+  color: #f8fafc !important;
+  background: transparent !important;
 }
 
+/* Paginación */
+.dark-mode .pagination-bar {
+  background: #152238 !important;
+  border-top: 1px solid #1e293b !important;
+}
+
+.dark-mode .pagination-info {
+  color: #94a3b8 !important;
+}
+
+.dark-mode .pagination-controls button {
+  background: #18233c !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark-mode .pagination-controls button:hover:not(:disabled) {
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.1) !important;
+}
+
+.dark-mode .pagination-controls button.active {
+  background: linear-gradient(135deg, #004b93, #0284c7) !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+}
+
+.dark-mode .pagination-controls button:disabled {
+  opacity: 0.3 !important;
+}
+
+/* Modal y Drawers */
 .dark-mode .modal-container {
-  background: #131d31;
-  color: #f8fafc;
-  border: 1px solid #1e293b;
+  background: #131d31 !important;
+  color: #f8fafc !important;
+  border-left-color: #1e293b !important;
 }
 
 .dark-mode .modal-header {
-  border-color: #1e293b;
+  background: linear-gradient(180deg, #152238 0%, #131d31 100%) !important;
+  border-bottom-color: #1e293b !important;
 }
 
-.dark-mode .modal-header h3 {
-  color: #f8fafc;
+.dark-mode .modal-header h3,
+.dark-mode .modal-header-text h3 {
+  color: #f8fafc !important;
+}
+
+.dark-mode .modal-header-text p {
+  color: #94a3b8 !important;
+}
+
+.dark-mode .modal-close-btn {
+  background: #18233c !important;
+  border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+
+.dark-mode .modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  border-color: #ef4444 !important;
+}
+
+.dark-mode .modal-actions {
+  background: #0f172a !important;
+  border-top-color: #1e293b !important;
+}
+
+.dark-mode .form-section-label {
+  color: #38bdf8 !important;
+  border-bottom-color: #1e293b !important;
+}
+
+.dark-mode .form-group label {
+  color: #cbd5e1 !important;
 }
 
 .dark-mode .form-group input,
 .dark-mode .form-group textarea,
 .dark-mode .form-group select {
-  background: #0f172a;
-  border-color: #334155;
-  color: #f8fafc;
+  background: #0b1120 !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark-mode .form-group input:focus,
+.dark-mode .form-group textarea:focus,
+.dark-mode .form-group select:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18) !important;
 }
 
 .dark-mode .filter-select {
-  background: #131d31;
-  border-color: #334155;
-  color: #f8fafc;
+  background: #131d31 !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
 }
 
-.dark-mode .pagination-bar {
-  border-color: #1e293b;
+/* Alertas de stock crítico en Dashboard */
+.dark-mode .low-stock-item-row {
+  background: #1c1917 !important;
+  border: 1px solid #78350f !important;
 }
 
-.dark-mode .pagination-controls button {
-  background: #131d31;
-  border-color: #334155;
-  color: #f8fafc;
+.dark-mode .item-name {
+  color: #fde68a !important;
+}
+
+.dark-mode .item-meta {
+  color: #f59e0b !important;
+}
+
+.dark-mode .stock-critical-pill {
+  background: rgba(220, 38, 38, 0.25) !important;
+  color: #fca5a5 !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
 }
 
 /* Responsivo */

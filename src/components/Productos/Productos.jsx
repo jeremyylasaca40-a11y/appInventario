@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import './Productos.css';
@@ -329,7 +330,7 @@ const Productos = () => {
       </div>
 
       {/* ── MODAL: Nuevo / Editar Producto ── */}
-      {showModal && (
+      {showModal && createPortal(
         <div className="modal-backdrop" onClick={() => setShowModal(false)}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
 
@@ -486,7 +487,8 @@ const Productos = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

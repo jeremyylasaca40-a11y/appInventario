@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import {
@@ -452,15 +453,23 @@ const Dashboard = () => {
       </div>
 
       {/* MODAL DE ACCIÓN RÁPIDA (Entrada / Salida Directa) */}
-      {quickModal.open && (
+      {quickModal.open && createPortal(
         <div className="modal-backdrop" onClick={() => setQuickModal({ ...quickModal, open: false })}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>
-                {quickModal.tipo === 'Entrada' ? '📥 Registrar Entrada Rápida' : '📤 Registrar Salida Rápida'}
-              </h3>
-              <button className="modal-close-btn" onClick={() => setQuickModal({ ...quickModal, open: false })}>
-                &times;
+              <div className="modal-header-left">
+                <div className="modal-header-icon">
+                  {quickModal.tipo === 'Entrada' ? '📥' : '📤'}
+                </div>
+                <div className="modal-header-text">
+                  <h3>
+                    {quickModal.tipo === 'Entrada' ? 'Registrar Entrada Rápida' : 'Registrar Salida Rápida'}
+                  </h3>
+                  <p>Operación directa de inventario</p>
+                </div>
+              </div>
+              <button className="modal-close-btn" onClick={() => setQuickModal({ ...quickModal, open: false })} aria-label="Cerrar">
+                ×
               </button>
             </div>
 
@@ -518,7 +527,8 @@ const Dashboard = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

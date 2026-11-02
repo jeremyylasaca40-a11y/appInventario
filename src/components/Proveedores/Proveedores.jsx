@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import './Proveedores.css';
@@ -196,16 +197,25 @@ const Proveedores = () => {
         )}
       </div>
 
-      {showModal && (
+      {showModal && createPortal(
         <div className="modal-backdrop" onClick={() => setShowModal(false)}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{form.id ? 'Editar Proveedor' : 'Nuevo Proveedor'}</h3>
-              <button className="modal-close-btn" onClick={() => setShowModal(false)}>&times;</button>
+              <div className="modal-header-left">
+                <div className="modal-header-icon">
+                  {form.id ? '✏️' : '🚚'}
+                </div>
+                <div className="modal-header-text">
+                  <h3>{form.id ? 'Editar Proveedor' : 'Nuevo Proveedor'}</h3>
+                  <p>{form.id ? `Modificando: ${form.razon_social}` : 'Completa los datos del proveedor comercial'}</p>
+                </div>
+              </div>
+              <button className="modal-close-btn" onClick={() => setShowModal(false)} aria-label="Cerrar">×</button>
             </div>
             <form onSubmit={handleSubmit} className="modal-form">
+              <span className="form-section-label">🏢 Datos de la Empresa</span>
               <div className="form-group">
-                <label>Razón Social / Empresa *</label>
+                <label>Razón Social / Empresa <span className="form-required">*</span></label>
                 <input
                   type="text"
                   name="razon_social"
@@ -213,6 +223,7 @@ const Proveedores = () => {
                   onChange={handleChange}
                   required
                   placeholder="Ej. Logitech Perú S.A.C."
+                  autoFocus
                 />
               </div>
               <div className="form-group">
@@ -225,6 +236,7 @@ const Proveedores = () => {
                   placeholder="Ej. Carlos Mendoza"
                 />
               </div>
+              <span className="form-section-label">📞 Canales de Contacto</span>
               <div className="form-row">
                 <div className="form-group">
                   <label>Teléfono</label>
@@ -257,7 +269,8 @@ const Proveedores = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

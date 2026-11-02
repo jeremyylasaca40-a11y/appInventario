@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import './Login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login'); // 'login' | 'register'
 
   // Login Form
@@ -36,9 +38,16 @@ const Login = () => {
         email: loginEmail,
         password: loginPassword
       });
-      localStorage.setItem('senati_user', JSON.stringify(res.data.usuario));
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+      if (res.data.usuario) {
+        localStorage.setItem('senati_user', JSON.stringify(res.data.usuario));
+      }
       showToast('¡Bienvenido/a al Sistema!', 'success');
-      setTimeout(() => { window.location.href = '/dashboard'; }, 500);
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 300);
     } catch (err) {
       showToast(err.response?.data?.error || 'Credenciales incorrectas', 'error');
     } finally {
@@ -60,9 +69,16 @@ const Login = () => {
         password: regPassword,
         rol: regRol
       });
-      localStorage.setItem('senati_user', JSON.stringify(res.data.usuario));
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+      if (res.data.usuario) {
+        localStorage.setItem('senati_user', JSON.stringify(res.data.usuario));
+      }
       showToast('¡Cuenta creada exitosamente!', 'success');
-      setTimeout(() => { window.location.href = '/dashboard'; }, 600);
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 300);
     } catch (err) {
       showToast(err.response?.data?.error || 'Error al registrar usuario', 'error');
     } finally {

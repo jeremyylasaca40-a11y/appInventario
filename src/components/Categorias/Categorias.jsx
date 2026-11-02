@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import './Categorias.css';
@@ -188,16 +189,25 @@ const Categorias = () => {
         )}
       </div>
 
-      {showModal && (
+      {showModal && createPortal(
         <div className="modal-backdrop" onClick={() => setShowModal(false)}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{form.id ? 'Editar Categoría' : 'Nueva Categoría'}</h3>
-              <button className="modal-close-btn" onClick={() => setShowModal(false)}>&times;</button>
+              <div className="modal-header-left">
+                <div className="modal-header-icon">
+                  {form.id ? '✏️' : '🏷️'}
+                </div>
+                <div className="modal-header-text">
+                  <h3>{form.id ? 'Editar Categoría' : 'Nueva Categoría'}</h3>
+                  <p>{form.id ? `Modificando: ${form.nombre}` : 'Completa los campos para registrar la categoría'}</p>
+                </div>
+              </div>
+              <button className="modal-close-btn" onClick={() => setShowModal(false)} aria-label="Cerrar">×</button>
             </div>
             <form onSubmit={handleSubmit} className="modal-form">
+              <span className="form-section-label">📋 Información de la Categoría</span>
               <div className="form-group">
-                <label>Nombre de la Categoría *</label>
+                <label>Nombre de la Categoría <span className="form-required">*</span></label>
                 <input
                   type="text"
                   name="nombre"
@@ -205,6 +215,7 @@ const Categorias = () => {
                   onChange={handleChange}
                   required
                   placeholder="Ej. Periféricos, Laptops..."
+                  autoFocus
                 />
               </div>
               <div className="form-group">
@@ -227,7 +238,8 @@ const Categorias = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

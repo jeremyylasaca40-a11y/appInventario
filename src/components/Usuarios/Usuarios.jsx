@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import api from '../../services/api';
 import Toast from '../Toast/Toast';
 import './Usuarios.css';
@@ -232,16 +233,25 @@ const Usuarios = () => {
         )}
       </div>
 
-      {showModal && (
+      {showModal && createPortal(
         <div className="modal-backdrop" onClick={() => setShowModal(false)}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{form.id ? 'Editar Usuario' : 'Nuevo Usuario'}</h3>
-              <button className="modal-close-btn" onClick={() => setShowModal(false)}>&times;</button>
+              <div className="modal-header-left">
+                <div className="modal-header-icon">
+                  {form.id ? '✏️' : '👥'}
+                </div>
+                <div className="modal-header-text">
+                  <h3>{form.id ? 'Editar Usuario' : 'Nuevo Usuario'}</h3>
+                  <p>{form.id ? `Modificando: ${form.nombre}` : 'Completa los datos del usuario del sistema'}</p>
+                </div>
+              </div>
+              <button className="modal-close-btn" onClick={() => setShowModal(false)} aria-label="Cerrar">×</button>
             </div>
             <form onSubmit={handleSubmit} className="modal-form">
+              <span className="form-section-label">👤 Datos Personales</span>
               <div className="form-group">
-                <label>Nombre Completo *</label>
+                <label>Nombre Completo <span className="form-required">*</span></label>
                 <input
                   type="text"
                   name="nombre"
@@ -249,11 +259,12 @@ const Usuarios = () => {
                   onChange={handleChange}
                   required
                   placeholder="Ej. Mario Antonio Ruiz"
+                  autoFocus
                 />
               </div>
 
               <div className="form-group">
-                <label>Correo Electrónico *</label>
+                <label>Correo Electrónico <span className="form-required">*</span></label>
                 <input
                   type="email"
                   name="email"
@@ -264,6 +275,7 @@ const Usuarios = () => {
                 />
               </div>
 
+              <span className="form-section-label">🔒 Seguridad y Privilegios</span>
               <div className="form-row">
                 <div className="form-group">
                   <label>{form.id ? 'Nueva Contraseña (Opcional)' : 'Contraseña *'}</label>
@@ -278,7 +290,7 @@ const Usuarios = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Rol de Usuario *</label>
+                  <label>Rol de Usuario <span className="form-required">*</span></label>
                   <select name="rol" value={form.rol} onChange={handleChange} required>
                     <option value="Administrador">Administrador</option>
                     <option value="Almacenero">Almacenero</option>
@@ -297,7 +309,8 @@ const Usuarios = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
