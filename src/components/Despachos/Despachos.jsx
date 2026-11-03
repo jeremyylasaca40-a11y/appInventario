@@ -33,6 +33,7 @@ const Despachos = () => {
 
   // Modal de Comprobante / Guía Oficial (para nueva emisión o reimpresión)
   const [guiaEmitida, setGuiaEmitida] = useState(null);
+  const [alertaFlotante, setAlertaFlotante] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
 
@@ -202,7 +203,13 @@ const Despachos = () => {
       });
       cargarDatos();
       fetchGuias();
-      showToast('✅ ¡Despacho emitido con éxito! Stock descontado');
+      if (res.data.articulos_criticos && res.data.articulos_criticos.length > 0) {
+        setAlertaFlotante(res.data.articulos_criticos);
+        setTimeout(() => setAlertaFlotante(null), 9000);
+        showToast(`⚠️ Despacho emitido. ¡Atención! ${res.data.articulos_criticos.length} artículo(s) quedaron en stock crítico`, 'error');
+      } else {
+        showToast('✅ ¡Despacho emitido con éxito! Stock descontado');
+      }
     } catch (err) {
       showToast(err.response?.data?.error || 'Error al emitir despacho', 'error');
     } finally {
@@ -642,6 +649,7 @@ const Despachos = () => {
 
             {/* Acciones del Modal */}
             <div className="guia-modal-actions">
+              
               <button
                 type="button"
                 className="btn-print-guia"
@@ -665,6 +673,52 @@ const Despachos = () => {
               </button>
             </div>
           </div>
+        </div>,
+        document.body
+      )}
+      {/* --- NUBE / TARJETA FLOTANTE DE ALERTA LOGÍSTICA (DURA 9S O REDIRIGE AL CLIC) --- */}
+      {alertaFlotante && alertaFlotante.length > 0 && createPortal(
+        <div
+          className="alerta-flotante-toast"
+          onClick={() => window.location.href = '/productos'}
+          title="Clic para ir a Catálogo de Productos y reponer de inmediato"
+        >
+          <div className="alerta-flotante-top">
+            <div className="alerta-flotante-title">
+              <span className="alerta-flotante-icon">⚠️</span>
+              <strong>Alerta: Stock Crítico Provocado</strong>
+            </div>
+            <button
+              type="button"
+              className="alerta-flotante-close"
+              onClick={(e) => {
+                e.stopPropagation();
+                setAlertaFlotante(null);
+              }}
+              title="Cerrar alerta"
+            >
+              ×
+            </button>
+          </div>
+
+          <p className="alerta-flotante-desc">
+            Tras el despacho, {alertaFlotante.length === 1 ? '1 artículo necesita' : `${alertaFlotante.length} artículos necesitan`} reposición urgente:
+          </p>
+
+          <div className="alerta-flotante-items">
+            {alertaFlotante.map((ac) => (
+              <div key={ac.producto_id} className="alerta-flotante-item">
+                <span>📦 {ac.nombre}</span>
+                <b>{ac.nuevo_stock} uds</b>
+              </div>
+            ))}
+          </div>
+
+          <div className="alerta-flotante-action">
+            <span>👉 Clic aquí para ir a Reponer en Catálogo ➔</span>
+          </div>
+
+          <div className="alerta-flotante-progress"></div>
         </div>,
         document.body
       )}

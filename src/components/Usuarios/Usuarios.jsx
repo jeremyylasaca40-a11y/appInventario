@@ -10,6 +10,12 @@ const Usuarios = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
+  let currentUserRole = 'Administrador';
+  try {
+    const s = localStorage.getItem('senati_user');
+    if (s) currentUserRole = JSON.parse(s).rol || 'Administrador';
+  } catch (e) {}
+
 
   const [form, setForm] = useState({
     id: null,
@@ -133,9 +139,13 @@ const Usuarios = () => {
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
           />
         </div>
-        <button className="btn-primary" onClick={() => handleOpenModal()}>
+        {currentUserRole === 'Administrador' ? (<button className="btn-primary" onClick={() => handleOpenModal()}>
           <span>+</span> Nuevo Usuario
-        </button>
+        </button>) : (
+          <span style={{ fontSize: '13px', background: '#fef3c7', color: '#92400e', padding: '6px 14px', borderRadius: '8px', fontWeight: 'bold' }}>
+            🔒 Modo Supervisor: Solo Lectura
+          </span>
+        )}
       </div>
 
       <div className="table-card">
@@ -194,7 +204,8 @@ const Usuarios = () => {
                       </button>
                     </td>
                     <td className="text-center">
-                      <div className="action-buttons">
+                      {currentUserRole === 'Administrador' ? (
+                          <div className="action-buttons">
                         <button className="btn-action btn-edit" onClick={() => handleOpenModal(u)}>
                           ✏️ Editar
                         </button>
@@ -202,6 +213,9 @@ const Usuarios = () => {
                           🗑️ Eliminar
                         </button>
                       </div>
+                        ) : (
+                          <span style={{ fontSize: '11px', color: '#64748b' }}>Sin acciones</span>
+                        )}
                     </td>
                   </tr>
                 ))

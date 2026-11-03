@@ -19,6 +19,8 @@ const Login = () => {
   const [regRol, setRegRol] = useState('Almacenero');
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRegPassword, setShowRegPassword] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
 
   const showToast = (message, type = 'error') => {
@@ -216,13 +218,21 @@ const Login = () => {
                     <span className="input-icon">🔒</span>
                     <input
                       id="login-password"
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                       required
                       autoComplete="current-password"
                     />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                      title={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                    >
+                      {showPassword ? '🙈' : '👁️'}
+                    </button>
                   </div>
                 </div>
 
@@ -328,13 +338,21 @@ const Login = () => {
                     <span className="input-icon">🔒</span>
                     <input
                       id="reg-password"
-                      type="password"
+                      type={showRegPassword ? 'text' : 'password'}
                       placeholder="Mínimo 6 caracteres"
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       required
                       autoComplete="new-password"
                     />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowRegPassword(!showRegPassword)}
+                      title={showRegPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                    >
+                      {showRegPassword ? '🙈' : '👁️'}
+                    </button>
                   </div>
                   <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', paddingLeft: '4px' }}>
                     🔐 Encriptada automáticamente con Bcrypt

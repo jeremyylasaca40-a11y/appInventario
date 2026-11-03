@@ -24,6 +24,13 @@ const Productos = () => {
   const [filterCriticalOnly, setFilterCriticalOnly] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
+  // Rol del usuario actual para RBAC
+  let currentUserRole = 'Almacenero';
+  try {
+    const s = localStorage.getItem('senati_user');
+    if (s) currentUserRole = JSON.parse(s).rol || 'Almacenero';
+  } catch (e) {}
+
 
   // Estado para modal de Reposición Rápida (Kardex)
   const [reponerModal, setReponerModal] = useState({
@@ -346,14 +353,16 @@ const Productos = () => {
                           >
                             ✏️ Editar
                           </button>
-                          <button
-                            id={`btn-delete-${p.id}`}
+                          {currentUserRole !== 'Almacenero' && (
+                            <button
+                              id={`btn-delete-${p.id}`}
                             className="btn-action btn-delete"
                             onClick={() => handleDelete(p.id, p.nombre)}
                             title="Eliminar producto"
                           >
                             🗑️ Eliminar
-                          </button>
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

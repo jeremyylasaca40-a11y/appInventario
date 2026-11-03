@@ -167,15 +167,20 @@ const Layout = () => {
             <span className="nav-text">Nuevo Despacho (Salidas)</span>
           </NavLink>
 
-          <div className="nav-section-label">ADMINISTRACIÓN</div>
-          <NavLink
-            to="/usuarios"
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            onClick={() => setSidebarOpen(false)}
-          >
-            <span className="nav-icon">👥</span>
-            <span className="nav-text">Usuarios</span>
-          </NavLink>
+                    {/* ADMINISTRACIÓN (Visible solo para Administrador y Supervisor) */}
+          {currentUser.rol !== 'Almacenero' && (
+            <>
+              <div className="nav-section-label">ADMINISTRACIÓN</div>
+              <NavLink
+                to="/usuarios"
+                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="nav-icon">👥</span>
+                <span className="nav-text">Usuarios</span>
+              </NavLink>
+            </>
+          )}
         </nav>
 
         <div className="sidebar-footer">

@@ -34,7 +34,7 @@ function App() {
         <Route path="proveedores" element={<Proveedores />} />
         <Route path="kardex" element={<Kardex />} />
         <Route path="despachos" element={<Despachos />} />
-        <Route path="usuarios" element={<Usuarios />} />
+        <Route path="usuarios" element={<ProtectedRoute allowedRoles={['Administrador', 'Supervisor']}><Usuarios /></ProtectedRoute>} />
       </Route>
 
       {/* Si la ruta no existe, enviar al Login */}

@@ -586,3 +586,28 @@
     padding: 28px 20px;
   }
 }
+
+/* Botón para ver/ocultar contraseña */
+.password-toggle-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  z-index: 2;
+  border-radius: 6px;
+}
+
+.password-toggle-btn:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.input-icon-wrapper input {
+  padding-right: 46px !important;
+}

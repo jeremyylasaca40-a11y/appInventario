@@ -684,3 +684,273 @@
   font-weight: 600;
   color: var(--prod-muted, #64748b);
 }
+
+/* Alerta Preventiva de Stock Crítico Provocado en la Guía */
+.alerta-critica-despacho {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 5px solid #dc2626;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  animation: fadeIn 0.3s ease;
+}
+
+.alerta-critica-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.alerta-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.alerta-critica-header strong {
+  display: block;
+  font-size: 14px;
+  color: #991b1b;
+}
+
+.alerta-critica-header p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+.alerta-critica-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 34px;
+}
+
+.alerta-critica-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  background: #ffffff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #fee2e2;
+}
+
+.alerta-prod-nombre {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.alerta-stock-restante {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.btn-programar-reposicion {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  margin-right: auto;
+  transition: all 0.2s ease;
+}
+
+.btn-programar-reposicion:hover {
+  background: #fde68a;
+  color: #78350f;
+  transform: translateY(-1px);
+}
+
+.dark-mode .alerta-critica-despacho {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: #991b1b;
+}
+
+.dark-mode .alerta-critica-header strong {
+  color: #fca5a5;
+}
+
+.dark-mode .alerta-critica-header p {
+  color: #f87171;
+}
+
+.dark-mode .alerta-critica-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.dark-mode .alerta-prod-nombre {
+  color: #f8fafc;
+}
+
+/* Ocultar la alerta al imprimir la guía formal */
+@media print {
+  .alerta-critica-despacho,
+  .btn-programar-reposicion {
+    display: none !important;
+  }
+}
+
+/* Tarjeta Flotante Inteligente de Alerta Logística (Snackbar) */
+.alerta-flotante-toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 360px;
+  max-width: 90vw;
+  background: #ffffff;
+  border: 1px solid #fecaca;
+  border-left: 6px solid #dc2626;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(220, 38, 38, 0.22), 0 4px 14px rgba(15, 23, 42, 0.12);
+  padding: 16px 18px 20px;
+  z-index: 10005;
+  cursor: pointer;
+  animation: floatInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.alerta-flotante-toast:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 20px 48px rgba(220, 38, 38, 0.3);
+}
+
+.alerta-flotante-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.alerta-flotante-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alerta-flotante-icon {
+  font-size: 20px;
+}
+
+.alerta-flotante-title strong {
+  font-size: 14px;
+  font-weight: 800;
+  color: #991b1b;
+}
+
+.alerta-flotante-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #94a3b8;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.15s ease;
+}
+
+.alerta-flotante-close:hover {
+  color: #dc2626;
+}
+
+.alerta-flotante-desc {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.alerta-flotante-items {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.alerta-flotante-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  background: #fef2f2;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.alerta-flotante-item span {
+  color: #0f172a;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.alerta-flotante-item b {
+  color: #dc2626;
+  font-weight: 800;
+}
+
+.alerta-flotante-action {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1e6fe8;
+}
+
+.alerta-flotante-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: #dc2626;
+  width: 100%;
+  animation: shrinkProgress 9s linear forwards;
+}
+
+@keyframes shrinkProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes floatInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dark-mode .alerta-flotante-toast {
+  background: #131d31;
+  border-color: #991b1b;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .alerta-flotante-title strong {
+  color: #fca5a5;
+}
+
+.dark-mode .alerta-flotante-desc {
+  color: #cbd5e1;
+}
+
+.dark-mode .alerta-flotante-item {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+.dark-mode .alerta-flotante-item span {
+  color: #f8fafc;
+}
