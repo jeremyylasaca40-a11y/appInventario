@@ -1,0 +1,686 @@
+/* ================================================
+   MÓDULO DE DESPACHOS — SENATI 2026
+================================================ */
+
+.despacho-page-header {
+  margin-bottom: 24px;
+}
+
+.despacho-page-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--prod-text);
+  margin: 0 0 6px;
+}
+
+.despacho-page-header p {
+  color: var(--prod-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Grid Principal de 2 Columnas */
+.despacho-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1024px) {
+  .despacho-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tarjetas */
+.despacho-catalog-card,
+.despacho-cart-card {
+  background: var(--prod-surface, #ffffff);
+  border: 1px solid var(--prod-border, #e2e8f0);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header del Catálogo */
+.catalog-header,
+.cart-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--prod-border, #e2e8f0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(180deg, #f8fafd 0%, #f1f5f9 100%);
+}
+
+.dark-mode .catalog-header,
+.dark-mode .cart-header {
+  background: #152238;
+}
+
+.catalog-header h3,
+.cart-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--prod-text);
+}
+
+/* Filtros */
+.catalog-filters {
+  padding: 16px 24px;
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid var(--prod-border, #e2e8f0);
+}
+
+.cat-select {
+  padding: 10px 14px;
+  border: 1px solid var(--prod-border, #e2e8f0);
+  border-radius: 10px;
+  background: var(--prod-surface, #ffffff);
+  color: var(--prod-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Scroll del catálogo */
+.catalog-items-scroll {
+  padding: 20px 24px;
+  max-height: 580px;
+  overflow-y: auto;
+}
+
+.prods-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+/* Tarjeta compacta de producto */
+.prod-mini-card {
+  background: var(--prod-surface, #ffffff);
+  border: 1px solid var(--prod-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.prod-mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  border-color: #93c5fd;
+}
+
+.prod-mini-card.agotado {
+  opacity: 0.6;
+  background: #f8fafc;
+}
+
+.prod-mini-info strong {
+  display: block;
+  font-size: 14px;
+  color: var(--prod-text);
+  margin-bottom: 6px;
+}
+
+.prod-mini-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cat-pill {
+  font-size: 11px;
+  color: var(--prod-muted, #64748b);
+}
+
+.price-tag {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--prod-blue, #1e6fe8);
+}
+
+.prod-mini-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px dashed var(--prod-border, #e2e8f0);
+}
+
+.stock-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.stock-pill.ok {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.stock-pill.low {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-add-cart {
+  background: #1e6fe8;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add-cart:hover:not(:disabled) {
+  background: #1456c0;
+}
+
+.btn-add-cart:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* CARRITO */
+.cart-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart-items-pill {
+  font-size: 11px;
+  font-weight: 800;
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.btn-clear-cart {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cart-items-list {
+  padding: 16px 20px;
+  max-height: 280px;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--prod-border, #e2e8f0);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cart-empty-state {
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--prod-muted, #64748b);
+}
+
+.empty-cart-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.cart-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: 1px solid var(--prod-border, #e2e8f0);
+  border-radius: 10px;
+  gap: 12px;
+}
+
+.dark-mode .cart-item-row {
+  background: #0f172a;
+}
+
+.cart-item-info strong {
+  display: block;
+  font-size: 13px;
+  color: var(--prod-text);
+}
+
+.cart-item-info span {
+  font-size: 11px;
+  color: var(--prod-muted);
+}
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--prod-border, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dark-mode .qty-control {
+  background: #1e293b;
+}
+
+.qty-control button {
+  background: none;
+  border: none;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--prod-text);
+}
+
+.qty-control span {
+  width: 24px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.cart-item-subtotal {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--prod-text);
+  min-width: 70px;
+  text-align: right;
+}
+
+.btn-remove-item {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #94a3b8;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-remove-item:hover {
+  color: #dc2626;
+}
+
+/* Checkout Area */
+.cart-checkout-area {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cart-summary-box {
+  background: #f8fafc;
+  border: 1px solid var(--prod-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dark-mode .cart-summary-box {
+  background: #0f172a;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--prod-muted);
+}
+
+.summary-line.total-highlight {
+  padding-top: 8px;
+  border-top: 1px dashed var(--prod-border, #e2e8f0);
+  font-size: 16px;
+  color: var(--prod-text);
+  font-weight: 800;
+}
+
+.total-amount {
+  color: #16a34a;
+  font-size: 20px;
+}
+
+.btn-emitir-despacho {
+  background: linear-gradient(135deg, #1e6fe8, #1456c0);
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(30, 111, 232, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-emitir-despacho:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 111, 232, 0.4);
+}
+
+.btn-emitir-despacho:disabled {
+  background: #cbd5e1;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* --- MODAL DE GUÍA IMPRIMIBLE (OFICIAL SENATI) --- */
+.guia-modal-container {
+  background: #ffffff;
+  width: 720px;
+  max-width: 95vw;
+  max-height: 90vh;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn 0.25s ease;
+}
+
+.guia-printable-sheet {
+  padding: 36px 40px;
+  background: #ffffff;
+  color: #0f172a;
+  overflow-y: auto;
+}
+
+.guia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #004b93;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.guia-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.guia-senati-badge {
+  background: #004b93;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 900;
+  padding: 8px 16px;
+  border-radius: 8px;
+  letter-spacing: 1px;
+}
+
+.guia-system-text strong {
+  display: block;
+  font-size: 15px;
+  color: #004b93;
+}
+
+.guia-system-text span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.guia-badge-box {
+  text-align: right;
+}
+
+.guia-tipo-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+.guia-numero-display {
+  font-size: 20px;
+  color: #dc2626;
+  font-family: monospace;
+}
+
+.guia-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.guia-meta-grid strong,
+.guia-meta-grid span {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.guia-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.guia-table th {
+  background: #f1f5f9;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #334155;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.guia-table td {
+  padding: 10px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.guia-firmas-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  padding-top: 20px;
+}
+
+.firma-box {
+  text-align: center;
+  width: 220px;
+}
+
+.firma-line {
+  border-top: 1px solid #94a3b8;
+  margin-bottom: 6px;
+}
+
+.firma-box span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.firma-box small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.guia-modal-actions {
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-print-guia {
+  background: #004b93;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-print-guia:hover {
+  background: #00366b;
+}
+
+/* Ocultar elementos irrelevantes al imprimir */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #guia-imprimible, #guia-imprimible * {
+    visibility: visible;
+  }
+  #guia-imprimible {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .guia-modal-actions {
+    display: none !important;
+  }
+}
+
+/* Backdrop Centrado Elegante para la Guía */
+.guia-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 16, 40, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.22s ease;
+}
+
+.btn-pdf-guia {
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pdf-guia:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+/* Pestañas de Navegación */
+.despacho-header-title {
+  margin-bottom: 16px;
+}
+
+.despacho-tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid var(--prod-border, #e2e8f0);
+  padding-bottom: 2px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--prod-muted, #64748b);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.tab-btn:hover {
+  color: var(--prod-blue, #1e6fe8);
+}
+
+.tab-btn.active {
+  color: var(--prod-blue, #1e6fe8);
+  border-bottom-color: var(--prod-blue, #1e6fe8);
+}
+
+.dark-mode .tab-btn.active {
+  color: #60a5fa;
+  border-bottom-color: #60a5fa;
+}
+
+/* Badge de Guía en Historial */
+.guia-code-pill {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 800;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
+.dark-mode .guia-code-pill {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+.guia-items-summary {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--prod-muted, #64748b);
+}

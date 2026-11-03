@@ -21,8 +21,17 @@ const Productos = () => {
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterCriticalOnly, setFilterCriticalOnly] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
+
+  // Estado para modal de Reposición Rápida (Kardex)
+  const [reponerModal, setReponerModal] = useState({
+    open: false,
+    producto: null,
+    cantidad: '10',
+    observaciones: ''
+  });
 
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -104,6 +113,47 @@ const Productos = () => {
       cargarDatos();
     } catch (err) {
       showToast(err.response?.data?.error || 'Error al guardar producto', 'error');
+    }
+  };
+
+    const handleOpenReponer = (prod) => {
+    const isCritical = prod.stock <= (prod.stock_minimo || 5);
+    const cantidadSugerida = isCritical ? Math.max(10, ((prod.stock_minimo || 5) * 2) - prod.stock) : 10;
+    setReponerModal({
+      open: true,
+      producto: prod,
+      cantidad: String(cantidadSugerida),
+      observaciones: `Reposición de stock para ${prod.nombre}`
+    });
+  };
+
+  const handleReponerSubmit = async (e) => {
+    e.preventDefault();
+    if (!reponerModal.producto || !reponerModal.cantidad) return;
+
+    const cant = parseInt(reponerModal.cantidad, 10);
+    if (isNaN(cant) || cant <= 0) {
+      showToast('La cantidad debe ser mayor a 0', 'error');
+      return;
+    }
+
+    const userStored = localStorage.getItem('senati_user');
+    const currentUserId = userStored ? JSON.parse(userStored).id : 1;
+
+    try {
+      const res = await api.post('/api/movimientos', {
+        producto_id: reponerModal.producto.id,
+        usuario_id: currentUserId,
+        tipo_movimiento: 'Entrada',
+        cantidad: cant,
+        observaciones: reponerModal.observaciones || `Reposición de stock (+${cant} uds)`
+      });
+
+      showToast(`📦 ¡Stock repuesto con éxito! Nuevo stock: ${res.data.nuevo_stock} uds`);
+      setReponerModal({ open: false, producto: null, cantidad: '10', observaciones: '' });
+      cargarDatos();
+    } catch (err) {
+      showToast(err.response?.data?.error || 'Error al registrar reposición en Kardex', 'error');
     }
   };
 
@@ -280,7 +330,15 @@ const Productos = () => {
                       {/* Acciones */}
                       <td style={{ textAlign: 'center' }}>
                         <div className="action-buttons">
-                          <button
+                                                    <button
+                            id={`btn-reponer-${p.id}`}
+                            className={`btn-action btn-reponer ${isLow ? 'pulse-critical' : ''}`}
+                            onClick={() => handleOpenReponer(p)}
+                            title={isLow ? `¡Stock crítico (${p.stock} uds)! Clic para reponer de inmediato` : 'Reponer stock'}
+                          >
+                            ➕ {isLow ? 'Reponer !' : 'Reponer'}
+                          </button>
+<button
                             id={`btn-edit-${p.id}`}
                             className="btn-action btn-edit"
                             onClick={() => handleOpenModal(p)}
@@ -484,6 +542,115 @@ const Productos = () => {
                 className="btn-primary"
               >
                 {form.id ? '💾 Guardar Cambios' : '✅ Crear Producto'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+      {/* ── MODAL / DRAWER DE REPOSICIÓN RÁPIDA (KARDEX) ── */}
+      {reponerModal.open && reponerModal.producto && createPortal(
+        <div className="modal-backdrop" onClick={() => setReponerModal({ ...reponerModal, open: false })}>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-header-left">
+                <div
+                  className="modal-header-icon"
+                  style={{
+                    background: 'linear-gradient(135deg, #16a34a, #22c55e)',
+                    boxShadow: '0 4px 14px rgba(22, 163, 74, 0.28)'
+                  }}
+                >
+                  📥
+                </div>
+                <div className="modal-header-text">
+                  <h3>Reponer Stock</h3>
+                  <p>Entrada oficial a Kardex para {reponerModal.producto.nombre}</p>
+                </div>
+              </div>
+              <button
+                id="btn-reponer-modal-close"
+                className="modal-close-btn"
+                onClick={() => setReponerModal({ ...reponerModal, open: false })}
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleReponerSubmit} className="modal-form" id="form-reponer">
+              <span className="form-section-label">📋 Resumen del Producto</span>
+
+              <div className="reponer-preview-card">
+                <div>
+                  <strong style={{ display: 'block', fontSize: '15px' }}>{reponerModal.producto.nombre}</strong>
+                  <span style={{ fontSize: '12px', color: 'var(--prod-muted)' }}>
+                    🏷️ {reponerModal.producto.categoria?.nombre || 'General'}
+                    {reponerModal.producto.proveedor?.razon_social && ` • 🏭 ${reponerModal.producto.proveedor.razon_social}`}
+                  </span>
+                </div>
+                <div className="reponer-preview-stock">
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontSize: '11px', display: 'block', color: 'var(--prod-muted)' }}>Actual</span>
+                    <span className={`stock-badge ${reponerModal.producto.stock <= (reponerModal.producto.stock_minimo || 5) ? 'stock-low' : 'stock-ok'}`}>
+                      {reponerModal.producto.stock} uds
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '18px', color: 'var(--prod-green)', fontWeight: 'bold' }}>➔</span>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontSize: '11px', display: 'block', color: 'var(--prod-muted)' }}>Nuevo Total</span>
+                    <span className="stock-badge stock-ok" style={{ fontWeight: '800' }}>
+                      {Number(reponerModal.producto.stock || 0) + (parseInt(reponerModal.cantidad, 10) || 0)} uds
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <span className="form-section-label">📦 Datos del Movimiento de Entrada</span>
+
+              <div className="form-group">
+                <label htmlFor="f-reponer-cantidad">
+                  Cantidad a Ingresar (+) <span className="form-required">*</span>
+                </label>
+                <input
+                  id="f-reponer-cantidad"
+                  type="number"
+                  min="1"
+                  value={reponerModal.cantidad}
+                  onChange={(e) => setReponerModal({ ...reponerModal, cantidad: e.target.value })}
+                  required
+                  placeholder="Ej. 10"
+                  autoFocus
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="f-reponer-obs">Guía de Remisión / Motivo / Observación</label>
+                <textarea
+                  id="f-reponer-obs"
+                  rows="2"
+                  value={reponerModal.observaciones}
+                  onChange={(e) => setReponerModal({ ...reponerModal, observaciones: e.target.value })}
+                  placeholder="Ej. Guía 001-5842 / Compra proveedor o reposición de stock..."
+                />
+              </div>
+            </form>
+
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setReponerModal({ ...reponerModal, open: false })}
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                form="form-reponer"
+                className="btn-primary"
+                style={{ background: 'linear-gradient(135deg, #16a34a, #15803d)', borderColor: '#15803d' }}
+              >
+                ✅ Confirmar Reposición (+{reponerModal.cantidad || 0})
               </button>
             </div>
           </div>

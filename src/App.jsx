@@ -7,6 +7,7 @@ import Categorias from './components/Categorias/Categorias';
 import Proveedores from './components/Proveedores/Proveedores';
 import Kardex from './components/Kardex/Kardex';
 import Usuarios from './components/Usuarios/Usuarios';
+import Despachos from './components/Despachos/Despachos';
 import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
@@ -32,6 +33,7 @@ function App() {
         <Route path="categorias" element={<Categorias />} />
         <Route path="proveedores" element={<Proveedores />} />
         <Route path="kardex" element={<Kardex />} />
+        <Route path="despachos" element={<Despachos />} />
         <Route path="usuarios" element={<Usuarios />} />
       </Route>
 

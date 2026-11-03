@@ -1,3 +1,4 @@
+import html2pdf from 'html2pdf.js';
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import api from '../../services/api';
@@ -13,6 +14,7 @@ const Kardex = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
+  const [comprobanteMov, setComprobanteMov] = useState(null);
 
   // Formulario de Transacción Kardex
   const [form, setForm] = useState({
@@ -62,6 +64,21 @@ const Kardex = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  
+  const handleDownloadKardexPdf = (mov) => {
+    const element = document.getElementById('comprobante-kardex-sheet');
+    if (!element) return;
+    const numDoc = mov?.observaciones?.match(/\[Guía:\s*([^\]]+)\]/i)?.[1] || `MOV-00${mov?.id}`;
+    const opt = {
+      margin: 10,
+      filename: `Comprobante_${numDoc}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
   };
 
   const handleOpenModal = () => {
@@ -159,20 +176,21 @@ const Kardex = () => {
                 <th>Cantidad</th>
                 <th>Usuario</th>
                 <th>Observaciones</th>
+                <th style={{ textAlign: 'center' }}>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-4">Cargando Kardex...</td>
+                  <td colSpan="8" className="text-center py-4">Cargando Kardex...</td>
                 </tr>
               ) : currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center py-4 text-muted">No se encontraron movimientos.</td>
+                  <td colSpan="8" className="text-center py-4 text-muted">No se encontraron movimientos.</td>
                 </tr>
               ) : (
                 currentItems.map((m) => (
-                  <tr key={m.id}>
+                  <tr key={m.id} className="kardex-clickable-row" onClick={() => setComprobanteMov(m)} title="Clic para ver detalle y boleta oficial">
                     <td className="text-muted font-mono">{String(m.id).padStart(3, '0')}</td>
                     <td className="text-muted text-sm">
                       {new Date(m.fecha_hora).toLocaleString('es-PE', {
@@ -196,6 +214,19 @@ const Kardex = () => {
                     </td>
                     <td className="text-sm">{m.usuario?.nombre || 'Administrador'}</td>
                     <td className="text-sm text-muted">{m.observaciones || 'Sin detalles'}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        type="button"
+                        className="btn-ver-boleta"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setComprobanteMov(m);
+                        }}
+                        title="Ver detalle completo y boleta oficial"
+                      >
+                        👁️ Ver Detalle
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -225,6 +256,140 @@ const Kardex = () => {
           </div>
         )}
       </div>
+
+
+      {/* --- MODAL / BOLETA OFICIAL DE MOVIMIENTO KARDEX --- */}
+      {comprobanteMov && createPortal(
+        <div className="guia-modal-backdrop" onClick={() => setComprobanteMov(null)}>
+          <div className="guia-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="guia-printable-sheet" id="comprobante-kardex-sheet">
+              {/* Header SENATI */}
+              <div className="guia-header">
+                <div className="guia-logo-area">
+                  <div className="guia-senati-badge">SENATI</div>
+                  <div className="guia-system-text">
+                    <strong>Sistema de Control de Inventario</strong>
+                    <span>Centro de Formación Profesional 2026</span>
+                  </div>
+                </div>
+                <div className="guia-badge-box">
+                  <span className="guia-tipo-label">
+                    {comprobanteMov.tipo_movimiento === 'Salida'
+                      ? 'GUÍA DE SALIDA Y DESPACHO'
+                      : comprobanteMov.tipo_movimiento === 'Entrada'
+                      ? 'COMPROBANTE DE INGRESO Y REPOSICIÓN'
+                      : 'ACTA DE AJUSTE DE INVENTARIO'}
+                  </span>
+                  <strong className="guia-numero-display">
+                    {comprobanteMov.observaciones?.match(/\[Guía:\s*([^\]]+)\]/i)?.[1] ||
+                      `MOV-${comprobanteMov.tipo_movimiento.toUpperCase().slice(0, 3)}-${String(comprobanteMov.id).padStart(4, '0')}`}
+                  </strong>
+                </div>
+              </div>
+
+              {/* Metadatos */}
+              <div className="guia-meta-grid">
+                <div>
+                  <span className="meta-label">Fecha y Hora de Registro:</span>
+                  <strong>{new Date(comprobanteMov.fecha_hora).toLocaleString('es-PE')}</strong>
+                </div>
+                <div>
+                  <span className="meta-label">Usuario Responsable:</span>
+                  <strong>{comprobanteMov.usuario?.nombre || 'Usuario SENATI'}</strong>
+                </div>
+                <div>
+                  <span className="meta-label">Tipo de Transacción:</span>
+                  <span className={`badge-pill badge-${comprobanteMov.tipo_movimiento.toLowerCase()}`}>
+                    {comprobanteMov.tipo_movimiento} Oficial
+                  </span>
+                </div>
+                <div>
+                  <span className="meta-label">Detalles / Observaciones:</span>
+                  <span>{comprobanteMov.observaciones || 'Sin observaciones registradas'}</span>
+                </div>
+              </div>
+
+              {/* Tabla del movimiento */}
+              <table className="guia-table">
+                <thead>
+                  <tr>
+                    <th>Ítem</th>
+                    <th>Producto Afectado</th>
+                    <th style={{ textAlign: 'center' }}>Cantidad</th>
+                    <th style={{ textAlign: 'right' }}>P. Referencial (S/)</th>
+                    <th style={{ textAlign: 'right' }}>Valor Total (S/)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td><strong>{comprobanteMov.producto?.nombre || 'Producto'}</strong></td>
+                    <td style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                      {comprobanteMov.tipo_movimiento === 'Salida' ? `-${comprobanteMov.cantidad}` : `+${comprobanteMov.cantidad}`} uds
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      {parseFloat(comprobanteMov.producto?.precio || 0).toFixed(2)}
+                    </td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                      {(parseFloat(comprobanteMov.producto?.precio || 0) * comprobanteMov.cantidad).toFixed(2)}
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan="2" style={{ fontWeight: 'bold' }}>TOTAL VALORIZADO</td>
+                    <td style={{ textAlign: 'center', fontWeight: 'bold' }}>{comprobanteMov.cantidad} uds</td>
+                    <td></td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold', fontSize: '15px' }}>
+                      S/ {(parseFloat(comprobanteMov.producto?.precio || 0) * comprobanteMov.cantidad).toFixed(2)}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              {/* Firmas de conformidad */}
+              <div className="guia-firmas-row">
+                <div className="firma-box">
+                  <div className="firma-line"></div>
+                  <span>Emitido / Autorizado</span>
+                  <small>{comprobanteMov.usuario?.nombre || 'Responsable de Almacén'}</small>
+                </div>
+                <div className="firma-box">
+                  <div className="firma-line"></div>
+                  <span>Recepción / Auditoría</span>
+                  <small>SENATI Control de Inventario</small>
+                </div>
+              </div>
+            </div>
+
+            {/* Acciones del Modal */}
+            <div className="guia-modal-actions">
+              <button
+                type="button"
+                className="btn-print-guia"
+                onClick={() => window.print()}
+              >
+                🖨️ Imprimir
+              </button>
+              <button
+                type="button"
+                className="btn-pdf-guia"
+                onClick={() => handleDownloadKardexPdf(comprobanteMov)}
+              >
+                📥 Descargar PDF
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setComprobanteMov(null)}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* Modal de Transacción Kardex */}
       {showModal && createPortal(

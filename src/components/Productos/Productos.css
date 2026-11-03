@@ -493,6 +493,59 @@
   box-shadow: 0 4px 12px rgba(220,38,38,0.2);
 }
 
+/* Botón Reponer rápido */
+.btn-reponer {
+  background: var(--prod-green-bg);
+  color: var(--prod-green);
+  border: 1px solid #bbf7d0;
+}
+
+.btn-reponer:hover {
+  background: #bbf7d0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22,163,74,0.25);
+}
+
+.btn-reponer.pulse-critical {
+  background: #16a34a;
+  color: #ffffff;
+  border: 1px solid #15803d;
+  animation: pulse-reponer 2s infinite ease-in-out;
+}
+
+.btn-reponer.pulse-critical:hover {
+  background: #15803d;
+  color: #ffffff;
+}
+
+@keyframes pulse-reponer {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);
+  }
+}
+
+/* Tarjeta resumen dentro del modal de reposición */
+.reponer-preview-card {
+  background: var(--prod-header-bg);
+  border: 1px solid var(--prod-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.reponer-preview-stock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
 /* Empty / loading states */
 .table-empty-state {
   text-align: center;
@@ -830,4 +883,41 @@
   .modal-container { width: 100vw; }
   .modal-form     { padding: 20px; }
   .modal-actions  { padding: 16px 20px; }
+}
+
+/* Botón Filtro Stock Crítico */
+.btn-filter-critical {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: var(--prod-surface);
+  border: 1px solid var(--prod-border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--prod-text);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btn-filter-critical:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: var(--prod-red);
+  transform: translateY(-1px);
+}
+
+.btn-filter-critical.active {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+}
+
+.btn-filter-critical.active:hover {
+  background: #b91c1c;
+  color: #ffffff;
 }

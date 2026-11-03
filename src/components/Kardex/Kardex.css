@@ -53,3 +53,299 @@
   color: #dc2626;
   font-size: 12px;
 }
+
+/* Fila cliqueable y botón de boleta en Kardex */
+.kardex-clickable-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.kardex-clickable-row:hover {
+  background: rgba(30, 111, 232, 0.08) !important;
+}
+
+.btn-ver-boleta {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #1e40af;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-ver-boleta:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.dark-mode .btn-ver-boleta {
+  background: #1e293b;
+  border-color: #334155;
+  color: #93c5fd;
+}
+
+.dark-mode .btn-ver-boleta:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* ===================================================
+   MODAL DE COMPROBANTE / BOLETA OFICIAL KARDEX SENATI
+=================================================== */
+
+.kardex-clickable-row {
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.kardex-clickable-row:hover {
+  background: rgba(30, 111, 232, 0.08) !important;
+  transform: scale-[1.002];
+}
+
+.btn-ver-boleta {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #1e40af;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-ver-boleta:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(30, 111, 232, 0.2);
+}
+
+.dark-mode .btn-ver-boleta {
+  background: #1e293b;
+  border-color: #334155;
+  color: #93c5fd;
+}
+
+.dark-mode .btn-ver-boleta:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Backdrop Centrado para el comprobante */
+.guia-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 16, 40, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.22s ease;
+}
+
+.guia-modal-container {
+  background: #ffffff;
+  width: 720px;
+  max-width: 95vw;
+  max-height: 90vh;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn 0.25s ease;
+}
+
+.guia-printable-sheet {
+  padding: 36px 40px;
+  background: #ffffff;
+  color: #0f172a;
+  overflow-y: auto;
+}
+
+.guia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #004b93;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.guia-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.guia-senati-badge {
+  background: #004b93;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 900;
+  padding: 8px 16px;
+  border-radius: 8px;
+  letter-spacing: 1px;
+}
+
+.guia-system-text strong {
+  display: block;
+  font-size: 15px;
+  color: #004b93;
+}
+
+.guia-system-text span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.guia-badge-box {
+  text-align: right;
+}
+
+.guia-tipo-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+.guia-numero-display {
+  font-size: 18px;
+  color: #dc2626;
+  font-family: monospace;
+}
+
+.guia-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.guia-meta-grid strong,
+.guia-meta-grid span {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.guia-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.guia-table th {
+  background: #f1f5f9;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #334155;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.guia-table td {
+  padding: 10px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.guia-firmas-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  padding-top: 20px;
+}
+
+.firma-box {
+  text-align: center;
+  width: 220px;
+}
+
+.firma-line {
+  border-top: 1px solid #94a3b8;
+  margin-bottom: 6px;
+}
+
+.firma-box span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.firma-box small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.guia-modal-actions {
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-print-guia {
+  background: #004b93;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-print-guia:hover {
+  background: #00366b;
+}
+
+.btn-pdf-guia {
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pdf-guia:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}

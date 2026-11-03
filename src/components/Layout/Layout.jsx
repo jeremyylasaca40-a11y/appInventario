@@ -1,11 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import api from '../../services/api';
 import './Layout.css';
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('senati_theme') === 'dark');
   const location = useLocation();
+  const [criticalProducts, setCriticalProducts] = useState([]);
+  const [alertsOpen, setAlertsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const res = await api.get('/api/productos');
+        if (Array.isArray(res.data)) {
+          const critical = res.data.filter((p) => Number(p.stock) <= Number(p.stock_minimo || 5));
+          setCriticalProducts(critical);
+        }
+      } catch {
+        // Silencioso si aún no hay sesión
+      }
+    };
+    fetchAlerts();
+    const interval = setInterval(fetchAlerts, 20000);
+    return () => clearInterval(interval);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (darkMode) {
@@ -53,6 +75,8 @@ const Layout = () => {
         return 'Categorías de Inventario';
       case '/proveedores':
         return 'Directorio de Proveedores';
+      case '/despachos':
+        return 'Despacho de Mercadería (Salidas Múltiples)';
       case '/kardex':
         return 'Kardex / Movimientos Atómicos';
       case '/usuarios':
@@ -134,6 +158,15 @@ const Layout = () => {
             <span className="nav-text">Kardex / Movimientos</span>
           </NavLink>
 
+          <NavLink
+            to="/despachos"
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            onClick={() => setSidebarOpen(false)}
+          >
+            <span className="nav-icon">🚚</span>
+            <span className="nav-text">Nuevo Despacho (Salidas)</span>
+          </NavLink>
+
           <div className="nav-section-label">ADMINISTRACIÓN</div>
           <NavLink
             to="/usuarios"
@@ -148,7 +181,7 @@ const Layout = () => {
         <div className="sidebar-footer">
           <div className="connection-badge">
             <span className="pulse-dot"></span>
-            <span>MySQL 8 Conectado (3307)</span>
+            <span>MySQL 8 Conectado (3306)</span>
           </div>
         </div>
       </aside>
@@ -165,6 +198,54 @@ const Layout = () => {
           </div>
 
           <div className="topbar-right">
+            {/* Campanita de Notificaciones de Stock Crítico */}
+            <div className="notification-bell-container">
+              <button
+                type="button"
+                className={`bell-btn ${criticalProducts.length > 0 ? 'has-alerts' : ''}`}
+                onClick={() => setAlertsOpen(!alertsOpen)}
+                title="Alertas de reposición de inventario"
+              >
+                🔔
+                {criticalProducts.length > 0 && (
+                  <span className="bell-badge">{criticalProducts.length}</span>
+                )}
+              </button>
+
+              {alertsOpen && (
+                <div className="alerts-dropdown">
+                  <div className="alerts-dropdown-header">
+                    <strong>⚠️ Alertas de Reposición ({criticalProducts.length})</strong>
+                    <button className="alerts-close" onClick={() => setAlertsOpen(false)}>×</button>
+                  </div>
+                  <div className="alerts-dropdown-body">
+                    {criticalProducts.length === 0 ? (
+                      <div className="no-alerts">
+                        <span>✅</span>
+                        <p>Inventario en niveles óptimos. No hay artículos con stock bajo.</p>
+                      </div>
+                    ) : (
+                      criticalProducts.map((p) => (
+                        <div key={p.id} className="alert-item">
+                          <div className="alert-item-info">
+                            <strong>{p.nombre}</strong>
+                            <span>Stock: <b className="text-danger">{p.stock} uds</b> (Mín: {p.stock_minimo || 5})</span>
+                          </div>
+                          <NavLink
+                            to="/productos"
+                            onClick={() => setAlertsOpen(false)}
+                            className="btn-alert-reponer"
+                          >
+                            Reponer ➔
+                          </NavLink>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Dark Mode Toggle */}
             <button
               className="theme-toggle-btn"
